@@ -33,6 +33,7 @@ export const EventForm = () => {
         <form className="eventForm">
             <h2 className="eventForm__title">Register New Event</h2>
 
+            {/*NAME*/}
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="name">Title: </label>
@@ -43,9 +44,10 @@ export const EventForm = () => {
                 </div>
             </fieldset>
 
+            {/*DATE*/}
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="name">Title: </label>
+                    <label htmlFor="date">Date: </label>
                     <input type="date" name="date" required autoFocus className="form-control"
                         value={currentEvent.date}
                         onChange={changeEventState}
@@ -53,13 +55,30 @@ export const EventForm = () => {
                 </div>
             </fieldset>
 
+            {/*LOCATION*/}
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="name">Title: </label>
-                    <input type="text" name="name" required autoFocus className="form-control"
-                        value={currentEvent.name}
+                    <label htmlFor="location">Location: </label>
+                    <input type="text" name="location" required autoFocus className="form-control"
+                        value={currentEvent.location}
                         onChange={changeEventState}
                     />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                {/*GAME*/}
+                <div className="form-group">
+                    <label htmlFor="game">Game: </label>
+                        {games.map(game => {
+                            return <>
+                                <div>
+                                    <input type="radio" name="game" value={game.id} key={`game--${game.id}`}
+                                        onChange={changeEventState}
+                                    /> {game.name}
+                                </div>
+                            </>
+                        })}
                 </div>
             </fieldset>
 
@@ -70,17 +89,16 @@ export const EventForm = () => {
                     // Prevent form from being submitted
                     evt.preventDefault()
 
-                    const game = {
-                        maker: currentGame.maker,
-                        title: currentGame.title,
-                        number_of_players: parseInt(currentGame.numberOfPlayers),
-                        skill_level: parseInt(currentGame.skillLevel),
-                        game_type: parseInt(currentGame.gameTypeId)
+                    const event = {
+                        name: currentEvent.name,
+                        date: currentEvent.date,
+                        location: currentEvent.location,
+                        game: parseInt(currentEvent.game)                    
                     }
 
                     // Send POST request to your API
-                    createGame(game)
-                        .then(() => navigate("/games"))
+                    createEvent(event)
+                        .then(() => navigate("/events"))
                 }}
                 className="btn btn-primary">Create</button>
         </form>
