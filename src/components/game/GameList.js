@@ -16,10 +16,13 @@ export const GameList = (props) => {
             {
                 games.map(game => {
                     return <section key={`game--${game.id}`} className="game">
-                        <div className="game--title">{game.name}</div>
-                        <div className="game--maker">by {game.gamer.bio}</div>
+                        <div className="game--name">{game.name}</div>
+                        <div className="game--gamer">by {game.gamer.bio}</div>
                         <div className="game--description">{game.description}</div>
-                        <div className="game--players">Type: {game.game_type.type}</div>
+                        <div className="game--type">Type: {game.game_type.type}</div>
+                        <button className="btn btn-2 btn-sep icon-create"
+                            onClick={() => {navigate({ pathname: `/games/edit/${game.id}`})}}>Edit
+                        </button>
                     </section>
                 })
             }
