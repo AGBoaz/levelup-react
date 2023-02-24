@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { useNavigate, useParams} from 'react-router-dom'
-import { editGame, getGameTypes, getSingleGame } from '../../managers/GameManager.js'
+import { useNavigate, useParams } from 'react-router-dom'
+import { getGameTypes, getSingleGame, editGame } from '../../managers/GameManager.js'
 
 
 export const GameEdit = () => {
@@ -10,25 +10,23 @@ export const GameEdit = () => {
     const [gameTypes, setGameTypes] = useState([])
 
     const [currentGame, setCurrentGame] = useState({
+        gamer: 0,
         name: "",
         description: "",
-        game_type: 0,
-        gamer: 0
+        game_type: 0
     })
-    
-    useEffect(() => {
-        // TODO: Get the game types, then set the state
-        getSingleGame(gameId)
-        .then(gameData => { setCurrentGame(gameData)})
-    }, [gameId])
 
     useEffect(() => {
-        // TODO: Get the game types, then set the state
+        // TODO: Get the games, then set the state
         getGameTypes()
         .then((gameTypesArray) => { setGameTypes(gameTypesArray)})
     }, [])
 
-
+    useEffect(() => {
+        // TODO: Get the event, then set the state
+        getSingleGame(gameId)
+        .then((gameData) => { setCurrentGame(gameData)})
+    }, [gameId])
 
     const changeGameState = (domEvent) => {
         // TODO: Complete the onChange function
@@ -41,26 +39,22 @@ export const GameEdit = () => {
         <form className="gameForm">
             <h2 className="gameForm__title">Edit a Game</h2>
 
+            {/*NAME*/}
             <fieldset>
-                {/*NAME*/}
                 <div className="form-group">
-                    <label htmlFor="title">Title: </label>
-                    <input 
-                        type="text"
-                        name="name" 
-                        required autoFocus
-                        className="form-control"
+                    <label htmlFor="name">Title: </label>
+                    <input type="text" name="name" required autoFocus className="form-control"
                         value={currentGame.name}
                         onChange={changeGameState}
                     />
                 </div>
             </fieldset>
 
+            {/*DESCRIPTION*/}
             <fieldset>
-                {/*DESCRIPTION*/}
                 <div className="form-group">
                     <label htmlFor="description">Description: </label>
-                    <input type="text" name="description" required className="form-control"
+                    <input type="description" name="description" required autoFocus className="form-control"
                         value={currentGame.description}
                         onChange={changeGameState}
                     />
@@ -68,20 +62,21 @@ export const GameEdit = () => {
             </fieldset>
 
             <fieldset>
-                {/*Game TYPE*/}
+                {/*GAME TYPE*/}
                 <div className="form-group">
-                    <label htmlFor="game_type">Game Type: </label>
-                        {gameTypes.map(gameType => {
+                    <label htmlFor="game">Game Type: </label>
+                        {gameTypes.map(game_type => {
                             return <>
                                 <div>
-                                    <input type="radio" name="game_type" value={gameType.id} key={`game_type--${gameType.id}`}
+                                    <input type="radio" name="game_type" value={game_type.id} key={`game--${game_type.id}`}
                                         onChange={changeGameState}
-                                    /> {gameType.type}
+                                    /> {game_type.type}
                                 </div>
                             </>
                         })}
                 </div>
             </fieldset>
+
 
 
             <button type="submit"
@@ -90,17 +85,17 @@ export const GameEdit = () => {
                     evt.preventDefault()
 
                     const game = {
-                        gamer: currentGame.gamer,
+                        gamer: parseInt(currentGame.gamer.id),
                         name: currentGame.name,
                         description: currentGame.description,
-                        game_type: currentGame.game_type
+                        game_type: parseInt(currentGame.game_type)                    
                     }
 
                     // Send POST request to your API
-                    editGame(game, 1)
+                    editGame(game, gameId)
                         .then(() => navigate("/"))
                 }}
-                className="btn btn-primary">Complete</button>
+                className="btn btn-primary">Done</button>
         </form>
     )
 }

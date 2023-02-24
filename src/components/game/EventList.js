@@ -19,6 +19,9 @@ export const EventList = (props) => {
                         <div className="event__title">{event.name} by {event.organizer}</div>
                         <div className="event__game">{event.game}</div>
                         <div className="event__location">{event.location} at {event.date} </div>
+                        <button className="btn btn-2 btn-sep icon-create"
+                            onClick={() => {navigate({ pathname: `/events/edit/${event.id}`})}}>Edit
+                        </button>
                     </section>
                 })
             }

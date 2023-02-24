@@ -49,5 +49,4 @@ export const editGame = (game, id) => {
             },
         body: JSON.stringify(game)
     })
-        .then(response => response.json())
 }
