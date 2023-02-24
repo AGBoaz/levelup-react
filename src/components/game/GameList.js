@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import {getGames} from "../../managers/GameManager.js"
+import {getGames, deleteGame} from "../../managers/GameManager.js"
 import { useNavigate } from "react-router-dom"
 
 export const GameList = (props) => {
@@ -11,6 +11,10 @@ export const GameList = (props) => {
         getGames().then(data => setGames(data))
     }, [])
 
+    const handleDelete = (gameId) => {
+        deleteGame(gameId).then(getGames().then(data => setGames(data)))
+    }
+
     return (
         <article className="games">
             {
@@ -20,8 +24,11 @@ export const GameList = (props) => {
                         <div className="game--gamer">by {game.gamer.bio}</div>
                         <div className="game--description">{game.description}</div>
                         <div className="game--type">Type: {game.game_type.type}</div>
-                        <button className="btn btn-2 btn-sep icon-create"
+                        <button className="btn btn-1 btn-sep icon-create"
                             onClick={() => {navigate({ pathname: `/games/edit/${game.id}`})}}>Edit
+                        </button>
+                        <button className="btn btn-3 btn-sep icon-create"
+                            onClick={() => {handleDelete(game.id)}}>Delete
                         </button>
                     </section>
                 })
