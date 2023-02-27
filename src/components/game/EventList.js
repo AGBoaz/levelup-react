@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { getEvents, deleteEvent } from "../../managers/EventManager.js"
+import { getEvents, deleteEvent, leaveEvent, joinEvent } from "../../managers/EventManager.js"
 
 export const EventList = (props) => {
     const navigate = useNavigate()
@@ -13,6 +13,12 @@ export const EventList = (props) => {
 
     const handleDelete = (eventId) => {
         deleteEvent(eventId).then(getEvents().then(data => setEvents(data)))
+    }
+    const handleLeave = (eventId) => {
+        leaveEvent(eventId).then(getEvents().then(data => setEvents(data)))
+    }
+    const handleJoin = (event, eventId) => {
+        joinEvent(event, eventId).then(getEvents().then(data => setEvents(data)))
     }
 
     return (
@@ -29,6 +35,19 @@ export const EventList = (props) => {
                         <button className="btn btn-3 btn-sep icon-create"
                             onClick={() => {handleDelete(event.id)}}>Delete
                         </button>
+                        {
+                            event.joined ?
+                            // statement is truthy
+                                <button className="btn btn-3 btn-sep icon-create"
+                                onClick={() => {handleLeave(event.id)}}>Leave
+                                </button>
+                            :
+                            // statement is falsy
+                                <button className="btn btn-2 btn-sep icon-create"
+                                onClick={() => {handleJoin(event, event.id)}}>Join
+                                </button>
+                        }
+                    
                     </section>
                 })
             }
